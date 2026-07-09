@@ -1270,3 +1270,360 @@ Building the **NestJS MCP Client** that will communicate with standalone MCP ser
 ---
 
 ## ⭐ If you found this project helpful, consider giving it a star on GitHub!
+
+# Phase 2 - MCP Client
+
+## Overview
+
+In Phase 1, we built an MCP Server and registered multiple tools. However, the server alone cannot execute tools unless a client communicates with it.
+
+In this phase, we build an **MCP Client** using the official Model Context Protocol SDK. The client connects to the MCP Server over the **STDIO transport**, discovers available tools, executes a selected tool, and receives the response.
+
+This phase helps you understand how AI applications communicate with MCP servers before integrating them into a web application.
+
+---
+
+## Learning Objectives
+
+By the end of this phase, you will understand:
+
+- What an MCP Client is
+- Difference between MCP Client and MCP Server
+- STDIO Transport
+- MCP Handshake
+- Tool Discovery
+- Tool Execution
+- Receiving Tool Responses
+- End-to-End MCP Communication
+
+---
+
+## Project Structure
+
+```text
+server
+│
+├── src/
+│   └── NestJS Application
+│
+├── mcp-server/
+│   ├── main.ts
+│   ├── register-tools.ts
+│   └── tools/
+│       ├── health/
+│       ├── time/
+│       ├── calculator/
+│       └── echo/
+│
+├── mcp-client/
+│   └── main.ts
+│
+└── package.json
+```
+
+---
+
+## MCP Communication Flow
+
+```text
+                MCP CLIENT
+                     │
+                     ▼
+           StdioClientTransport
+                     │
+                     ▼
+                MCP SERVER
+                     │
+         ┌───────────┼────────────┐
+         ▼           ▼            ▼
+     Health Tool   Time Tool   Calculator Tool
+                     │
+                     ▼
+               Tool Response
+                     │
+                     ▼
+                MCP Client
+```
+
+---
+
+## Step 1 - Create MCP Client
+
+Create a new folder.
+
+```text
+server/
+└── mcp-client/
+      └── main.ts
+```
+
+The MCP Client is intentionally kept separate from the NestJS application. This allows you to learn the MCP protocol independently before integrating it into the backend.
+
+---
+
+## Step 2 - Create Client
+
+Create a new client instance.
+
+```ts
+const client = new Client({
+  name: "mcp-hub-client",
+  version: "1.0.0",
+});
+```
+
+The client identifies itself to the MCP Server during the connection handshake.
+
+---
+
+## Step 3 - Configure Transport
+
+Use the STDIO transport to communicate with the server.
+
+```ts
+const transport = new StdioClientTransport({
+  command: "npx",
+  args: ["ts-node", "mcp-server/main.ts"],
+});
+```
+
+The transport starts the MCP Server automatically as a child process.
+
+---
+
+## Step 4 - Connect to Server
+
+Connect the client.
+
+```ts
+await client.connect(transport);
+```
+
+Connection Flow
+
+```text
+MCP Client
+     │
+     ▼
+STDIO Transport
+     │
+     ▼
+Launch MCP Server
+     │
+     ▼
+Handshake
+     │
+     ▼
+Connected
+```
+
+---
+
+## Step 5 - Discover Available Tools
+
+Request the list of tools from the server.
+
+```ts
+const tools = await client.listTools();
+```
+
+The server returns metadata for every registered tool.
+
+Example
+
+```text
+health
+time
+calculator
+echo
+```
+
+This process is called **Tool Discovery**.
+
+---
+
+## Step 6 - Execute a Tool
+
+Execute the Health tool.
+
+```ts
+const result = await client.callTool({
+  name: "health",
+  arguments: {},
+});
+```
+
+Communication Flow
+
+```text
+Client
+   │
+callTool()
+   │
+   ▼
+MCP Server
+   │
+Health Tool
+   │
+Health Service
+   │
+Return Result
+```
+
+---
+
+## Step 7 - Receive Tool Response
+
+Example response
+
+```json
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"status\":\"UP\",\"uptime\":12.3}"
+    }
+  ]
+}
+```
+
+The MCP protocol always returns structured content.
+
+---
+
+## Step 8 - Parse the Response
+
+Parse the JSON string returned by the tool.
+
+```ts
+const health = JSON.parse(result.content[0].text);
+
+console.log(health);
+```
+
+Example
+
+```text
+{
+    status: "UP",
+    uptime: 12.3
+}
+```
+
+---
+
+## End-to-End Communication
+
+```text
+                MCP CLIENT
+                     │
+             connect()
+                     │
+                     ▼
+               MCP SERVER
+                     │
+             listTools()
+                     │
+                     ▼
+       health
+       time
+       calculator
+       echo
+                     │
+             callTool("health")
+                     │
+                     ▼
+             Health Service
+                     │
+             getHealth()
+                     │
+                     ▼
+            JSON Response
+                     │
+                     ▼
+               MCP Client
+```
+
+---
+
+## What We Learned
+
+✔ Created an MCP Client
+
+✔ Connected to an MCP Server
+
+✔ Performed the MCP Handshake
+
+✔ Discovered available tools
+
+✔ Executed MCP tools
+
+✔ Received structured tool responses
+
+✔ Parsed returned data
+
+✔ Understood end-to-end MCP communication
+
+---
+
+## Current Project Progress
+
+```text
+✔ Phase 0
+Project Setup
+
+✔ Phase 1
+MCP Server
+    ✔ Register Tools
+    ✔ Health Tool
+    ✔ Time Tool
+    ✔ Calculator Tool
+    ✔ Echo Tool
+
+✔ Phase 2
+MCP Client
+    ✔ Client Creation
+    ✔ STDIO Transport
+    ✔ Handshake
+    ✔ Tool Discovery
+    ✔ Tool Execution
+    ✔ Response Handling
+
+⬜ Phase 3
+NestJS Integration
+
+⬜ Phase 4
+React Dashboard
+
+⬜ Phase 5
+LLM Integration
+
+⬜ Phase 6
+Production Architecture
+```
+
+---
+
+## Next Phase
+
+In Phase 3, the standalone MCP Client will be integrated into the NestJS application.
+
+Architecture
+
+```text
+React UI
+    │
+HTTP
+    │
+NestJS API
+    │
+MCP Service
+    │
+MCP Client
+    │
+MCP Server
+    │
+Registered Tools
+```
+
+This architecture allows the backend to communicate with one or more MCP servers and expose their functionality through REST APIs.
