@@ -1,5 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+
+import 'dotenv/config';
 
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
@@ -11,6 +14,13 @@ async function bootstrap() {
     credentials: true,
   });
 
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
   const config = new DocumentBuilder()
     .setTitle('MCP Hub API')
     .setDescription('API documentation for MCP Hub')

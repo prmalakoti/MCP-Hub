@@ -1627,3 +1627,298 @@ Registered Tools
 ```
 
 This architecture allows the backend to communicate with one or more MCP servers and expose their functionality through REST APIs.
+
+# MCP Hub
+
+A production-oriented platform for managing, monitoring, and interacting with multiple Model Context Protocol (MCP) servers through a centralized web application.
+
+The goal of this project is to understand the complete MCP ecosystem by building every component from scratch, including:
+
+- MCP Hub (NestJS)
+- MCP Servers
+- MCP Clients
+- React Dashboard
+- AI Agent Integration
+- LLM Providers
+- Vector Database
+- RAG Pipeline
+- Production Deployment
+
+---
+
+# Tech Stack
+
+## Backend
+
+- NestJS
+- TypeScript
+- MySQL
+- TypeORM
+- Swagger
+- Model Context Protocol SDK
+
+## Frontend (Upcoming)
+
+- React
+- TypeScript
+
+## AI (Upcoming)
+
+- Gemini
+- OpenAI
+- Ollama
+
+---
+
+# Project Structure
+
+```
+MCP-Hub
+│
+├── client/                     # React Application (Upcoming)
+│
+└── server/
+    │
+    ├── src/                    # NestJS Hub
+    │
+    ├── mcp-server/             # MCP Server
+    │
+    ├── mcp-client/             # MCP Client
+    │
+    ├── package.json
+    │
+    └── tsconfig.json
+```
+
+---
+
+# Project Roadmap
+
+| Phase                                       | Status |
+| ------------------------------------------- | ------ |
+| Phase 0 - Project Setup                     | ✅     |
+| Phase 1 - MCP Server Basics                 | ✅     |
+| Phase 2 - MCP Client Basics                 | ✅     |
+| Phase 3 - MCP Registry & Process Management | 🚧     |
+| Phase 4 - React Dashboard                   | ⏳     |
+| Phase 5 - Tool Discovery                    | ⏳     |
+| Phase 6 - Authentication                    | ⏳     |
+| Phase 7 - LLM Integration                   | ⏳     |
+| Phase 8 - AI Agents                         | ⏳     |
+| Phase 9 - Vector DB & RAG                   | ⏳     |
+| Phase 10 - Production Deployment            | ⏳     |
+
+---
+
+# Completed Features
+
+## Phase 0
+
+### Project Setup
+
+- NestJS Backend
+- React Project Structure
+- Swagger Configuration
+- Environment Variables
+- TypeScript Configuration
+- Project Architecture
+- Git Repository
+
+---
+
+## Phase 1
+
+### MCP Server
+
+Implemented a standalone MCP Server using the official MCP SDK.
+
+### Features
+
+- STDIO Transport
+- Tool Registration
+- Health Tool
+- Echo Tool
+- Calculator Tool
+- Time Tool
+- Modular Tool Registration
+
+Example:
+
+```
+MCP Server
+    │
+    ├── Health Tool
+    ├── Echo Tool
+    ├── Calculator Tool
+    └── Time Tool
+```
+
+---
+
+## Phase 2
+
+### MCP Client
+
+Implemented an MCP Client capable of communicating with MCP Servers.
+
+### Features
+
+- Connect to MCP Server
+- Discover Available Tools
+- Execute Tools
+- Handle Responses
+- Error Handling
+- STDIO Communication
+
+Architecture
+
+```
+MCP Client
+      │
+      ▼
+MCP Server
+      │
+      ├── Health
+      ├── Echo
+      ├── Calculator
+      └── Time
+```
+
+---
+
+## Phase 3 (Current)
+
+### MCP Hub
+
+Building a centralized platform for managing multiple MCP Servers.
+
+### Completed
+
+#### Database
+
+- MySQL Integration
+- TypeORM Configuration
+- MCP Server Entity
+- DTO Validation
+
+#### REST APIs
+
+- Create MCP Server
+- Get All Servers
+- Get Server By ID
+- Update Server
+- Delete Server
+
+#### Process Manager
+
+- Launch MCP Server
+- Track Running Processes
+- PID Tracking
+- Process Registry
+
+#### Server Lifecycle
+
+- Start Server API
+- Stop Server API
+- Restart Server API
+- Automatic Status Synchronization
+- Process Exit Detection
+
+#### Sample MCP Server
+
+A standalone MCP server has been added for testing and learning purposes.
+
+It demonstrates:
+
+- Tool Registration
+- STDIO Transport
+- Echo Tool
+- Time Tool
+
+---
+
+# Current Architecture
+
+```
+                React Dashboard (Upcoming)
+                         │
+                         ▼
+                 NestJS MCP Hub
+                         │
+             ┌───────────┴───────────┐
+             │                       │
+             ▼                       ▼
+      Process Manager          MySQL Registry
+             │
+             ▼
+       MCP Server Process
+             │
+     ┌───────┴────────┐
+     │                │
+     ▼                ▼
+  Echo Tool       Time Tool
+```
+
+---
+
+# REST APIs
+
+## MCP Server
+
+| Method | Endpoint         | Description     |
+| ------ | ---------------- | --------------- |
+| POST   | /mcp             | Register Server |
+| GET    | /mcp             | List Servers    |
+| GET    | /mcp/:id         | Get Server      |
+| PATCH  | /mcp/:id         | Update Server   |
+| DELETE | /mcp/:id         | Delete Server   |
+| POST   | /mcp/:id/start   | Start Server    |
+| POST   | /mcp/:id/stop    | Stop Server     |
+| POST   | /mcp/:id/restart | Restart Server  |
+
+---
+
+# Upcoming
+
+## Phase 4
+
+React Dashboard
+
+- Server Management
+- Live Status
+- Start/Stop Controls
+- Logs Viewer
+- Tool Discovery
+- Dashboard UI
+
+---
+
+## Long-Term Vision
+
+MCP Hub aims to become a production-ready orchestration platform capable of:
+
+- Managing multiple MCP Servers
+- Connecting multiple AI models
+- Running AI Agents
+- Supporting RAG with Vector Databases
+- Managing enterprise AI workflows
+
+---
+
+# Learning Goals
+
+This project demonstrates practical experience with:
+
+- NestJS
+- React
+- TypeScript
+- MCP SDK
+- REST APIs
+- Process Management
+- MySQL
+- TypeORM
+- AI Tool Integration
+- LLM Orchestration
+- Production System Design
+
+---
